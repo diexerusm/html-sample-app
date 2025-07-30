@@ -53,23 +53,22 @@ pipeline {
                     }
                 }
             }
+        }
             // using docker plugin to build container image
-            
-            stage('building docker image'){
-                steps {
-                    echo 'starting docker build process'
-                    // to use docker plugin using script 
-                    script {
-                        def imageName  = "ashuwebapp-iis-ltsc2022"
-                        def imageTag   = "codev1"
-                        docker.build("${imageName}:${imageTag}",".")
+        stage('building docker image'){
+            steps {
+                echo 'starting docker build process'
+                // to use docker plugin using script 
+                script {
+                    def imageName  = "ashuwebapp-iis-ltsc2022"
+                    def imageTag   = "codev1"
+                    docker.build("${imageName}:${imageTag}",".")
 
-                    }
-                    // verify image build 
-                    bat 'docker images   | findstr ashuwebapp'
                 }
-            
+                    // verify image build 
+                bat 'docker images   | findstr ashuwebapp'
             }
+            
         }
      
     }
