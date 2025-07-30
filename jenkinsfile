@@ -6,8 +6,8 @@ pipeline {
         REPO_NAME  = 'https://github.com/diexerusm/html-sample-app.git'
         BRANCH_NAME = 'master'
         SONAR_TOKEN  = credentials('niraj_sonarqube_token')
-        SONAR_PROJECT_KEY =  'ashu-day3'
-        SONAR_SERVER_NAME = 'ashu-sonarqube' // name we have configured under jenkins global confir
+        SONAR_PROJECT_KEY =  'niraj_sonarqube_project'
+        SONAR_SERVER_NAME = 'niraj_sonarqube' // name we have configured under jenkins global confir
     }
 
     stages {
