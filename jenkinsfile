@@ -8,6 +8,7 @@ pipeline {
         SONAR_TOKEN  = credentials('niraj_sonarqube_token')
         SONAR_PROJECT_KEY =  'niraj_sonarqube_project'
         SONAR_SERVER_NAME = 'niraj_sonarqube' // name we have configured under jenkins global confir
+        DOCKER_CREDS = 'niraj_docker_hub_cred'
     }
 
     stages {
@@ -55,21 +56,22 @@ pipeline {
             }
         }
             // using docker plugin to build container image
-        stage('building docker image'){
-            steps {
-                echo 'starting docker build process'
-                // to use docker plugin using script 
+         stage('Docker hub image push'){
+            steps{
+                echo 'pushing image to docker hub'
                 script {
-                    def imageName  = "ashuwebapp-iis-ltsc2022"
+                    def imageName  = "test121er/ashuwebapp-iis-ltsc2022"
                     def imageTag   = "codev1"
-                    docker.build("${imageName}:${imageTag}",".")
+                    def hubCred   = "${DOCKER_CREDS}"
+                    // calling jenkins pluing docker pipeline to push
+                    docker.withRegistry('https://registry.hub.docker.com',hubCred){
+                        docker.image(imageName + ":" + imageTag).push()
+                        // 
+
+                    }
 
                 }
-                    // verify image build 
-                bat 'docker images   | findstr ashuwebapp'
             }
-            
         }
-     
     }
 }
