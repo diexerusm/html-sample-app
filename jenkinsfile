@@ -62,8 +62,8 @@ pipeline {
                 echo 'starting docker build process'
                 // to use docker plugin using script 
                 script {
-                    def imageName  = "docker.io/test121er/ashuwebapp-iis-ltsc2022"
-                    def imageTag   = "codev1"
+                    def imageName  = "docker.io/test121er/nirajwebapp-iis-ltsc2022"
+                    def imageTag   = "codev1.0"
                     docker.build("${imageName}:${imageTag}",".")
 
                 }
@@ -78,8 +78,8 @@ pipeline {
             steps{
                 echo 'pushing image to docker hub'
                 script {
-                    def imageName  = "test121er/ashuwebapp-iis-ltsc2022"
-                    def imageTag   = "codev1"
+                    def imageName  = "test121er/nirajwebapp-iis-ltsc2022"
+                    def imageTag   = "codev1.0"
                     def hubCred   = "${DOCKER_CREDS}"
                     // calling jenkins pluing docker pipeline to push
                     docker.withRegistry('https://registry.hub.docker.com',hubCred){
