@@ -73,6 +73,18 @@ pipeline {
             
         }
 
+        // add stage to scan using trivy and  
+         stage('Trivy scan'){
+            steps{
+                echo 'Scanning the image using trivy'
+                script {
+                    def imageName  = "docker.io/test121er/nirajwebapp-iis-ltsc2022"
+                    def imageTag   = "codev1.0"
+                    trivy image --severity CRITICAL,HIGH --exit-code 1 ${imageName}:${imageTag}
+                }
+            }
+        }
+
         // using docker plugin to build container image
          stage('Docker hub image push'){
             steps{
