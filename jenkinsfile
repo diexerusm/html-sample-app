@@ -80,8 +80,17 @@ pipeline {
                 script {
                     def imageName  = "docker.io/test121er/nirajwebapp-iis-ltsc2022"
                     def imageTag   = "codev1.0"
-                    bat """
-                    trivy image --severity CRITICAL,HIGH --exit-code 1 ${imageName}:${imageTag}
+                   bat """
+                    trivy image  --severity HIGH,CRITICAL --format table -o report.txt ${imageName}:${imageTag}
+                    findstr /I "HIGH CRITICAL"  report.txt  >null
+
+                    if %errorlevel% == 0 (
+                    echo [ERROR] HIGH or ciritical found 
+                    exit /b 1
+                    )  
+                    else (
+                    echo no error found 
+                    )
                     """
                 }
             }
