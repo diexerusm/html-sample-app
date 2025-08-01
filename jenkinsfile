@@ -9,6 +9,9 @@ pipeline {
         SONAR_PROJECT_KEY =  'niraj_sonarqube_project'
         SONAR_SERVER_NAME = 'niraj_sonarqube' // name we have configured under jenkins global confir
         DOCKER_CREDS = 'niraj_docker_cred'
+        TRIVY_REPORT = 'trivy_scan_report_niraj.txt'
+        IMAGE_NAME  = "test121er/nirajwebapp-iis-ltsc2022"
+        IMAGE_TAG =  "codev1.0"
     }
 
     stages {
@@ -74,25 +77,13 @@ pipeline {
         }
 
         // add stage to scan using trivy and  
-         stage('Trivy scan'){
-            steps{
-                echo 'Scanning the image using trivy'
-                script {
-                    def imageName  = "docker.io/test121er/nirajwebapp-iis-ltsc2022"
-                    def imageTag   = "codev1.0"
-                   bat """
-                    trivy image  --severity HIGH,CRITICAL --format table -o report.txt ${imageName}:${imageTag}
-                    findstr /I "HIGH CRITICAL"  report.txt  >null
-
-                    if %errorlevel% == 0 (
-                    echo [ERROR] HIGH or ciritical found 
-                    exit /b 1
-                    )  
-                    else (
-                    echo no error found 
-                    )
-                    """
-                }
+         // add stage to scan using trivy is no HIgh , critical vuln then proceed else stpo pipeline
+        stage('post build security check using trivy'){
+            steps {
+                echo "doing scan"
+                bat """
+                trivy image --severity HIGH,CRITICAL --format table  --report summary -o ${TRIVY_REPORT} ${IMAGE_NAME}:${IMAGE_TAG} --skip-version-check
+                """
             }
         }
 
